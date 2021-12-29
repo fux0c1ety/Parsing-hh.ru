@@ -20,5 +20,5 @@ for i in range(35787520, 1, -1):
             f.write(str(d["name"])+'.'+str((d["salary"])["from"])+','+str((d["salary"])["to"])+','+str((d["salary"])["currency"])+','+str(d['created_at'])+','+url+str(i)+'\n')            
             print(d["name"], (d["salary"])["from"], '-' ,(d["salary"])["to"], (d["salary"])["currency"], d['created_at']+' '+url+str(i))
     except:
-        time.sleep(random.uniform(0, 3))
+        time.sleep(random.uniform(0, 0.1))
     f.close()
