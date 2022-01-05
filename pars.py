@@ -6,22 +6,31 @@ API_URL = 'https://api.hh.ru/vacancies/'
 SITE_URL = 'https://hh.ru/vacancy/'
 ID = 35787520
 
+OUT_FILE = open('list.csv', 'a')
+
 while True:
     ID += 1
-    f = open('list.csv', 'a')
-    d = requests.get(API_URL+str(ID)).json()
+    response = requests.get(API_URL+str(ID)).json()
     print()
     try:
-        if (d["salary"])["from"]==None:
-            f.write(str(d["name"])+';'+str((d["salary"])["to"])+';'+str((d["salary"])["currency"])+';'+str(d['created_at'])+';'+SITE_URL+str(ID)+'\n')
-            print(d["name"], (d["salary"])["to"], (d["salary"])["currency"], d['created_at']+' '+SITE_URL+str(ID))
-        elif (d["salary"])["to"]==None:
-            f.write(str(d["name"])+';'+str((d["salary"])["from"])+';'+str((d["salary"])["currency"])+';'+str(d['created_at'])+';'+SITE_URL+str(ID)+'\n')
-            print(d["name"], (d["salary"])["from"], (d["salary"])["currency"], d['created_at']+' '+SITE_URL+str(ID))
+        if (response["salary"])["from"]==None:
+            resstr = response["name"]+';'+' '+';'+str((response["salary"])["to"])+';'+(response["salary"])["currency"]+';'+str(response['created_at'])+';'+SITE_URL+str(ID)+'\n'
+            OUT_FILE.write(resstr)
+            print(response["name"], (response["salary"])["to"], (response["salary"])["currency"], response['created_at']+' '+SITE_URL+str(ID))
+        elif (response["salary"])["to"]==None:
+            resstr = response["name"]+';'+str((response["salary"])["from"])+';'+' '+';'+(response["salary"])["currency"]+';'+str(response['created_at'])+';'+SITE_URL+str(ID)+'\n'
+            OUT_FILE.write(resstr)
+            print(response["name"], (response["salary"])["from"], (response["salary"])["currency"], response['created_at']+' '+SITE_URL+str(ID))
         else:
-            f.write(str(d["name"])+';'+str((d["salary"])["from"])+';'+str((d["salary"])["to"])+';'+str((d["salary"])["currency"])+';'+str(d['created_at'])+';'+SITE_URL+str(ID)+'\n')  
-            print(d["name"], (d["salary"])["from"], '-' ,(d["salary"])["to"], (d["salary"])["currency"], d['created_at']+' '+SITE_URL+str(ID))
+            resstr = response["name"]+';'+str((response["salary"])["from"])+';'+str((response["salary"])["to"])+';'+response["salary"]["currency"]+';'+response['created_at']+';'+SITE_URL+ID+'\n' 
+            OUT_FILE.write(resstr)  
+            print(response["name"], (response["salary"])["from"], '-' ,(response["salary"])["to"], (response["salary"])["currency"], response['created_at']+' '+SITE_URL+str(ID))
 
-    except:
+    except TypeError:
         time.sleep(random.uniform(0, 0.1))
-    f.close()
+
+    except KeyError:
+        time.sleep(random.uniform(0, 0.1))
+
+    except KeyboardInterrupt:
+        f.close()
